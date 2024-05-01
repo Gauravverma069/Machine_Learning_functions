@@ -4,7 +4,7 @@ A machine learning function repository for a centralized collection of various m
 
 ## Functions List:
 1.  [_**Detect Outliers**_](#Detect_Outliers)
-
+2.  [_**Visual**_](#visual)
 ## Functions in Detail:
 
 <a name="Detect_Outliers"></a>
@@ -27,6 +27,25 @@ Additional Function returns
   3. **zscore_cols** - list of columns using method Z_score
   4. **iqr_cols** - list of columns using method IQR
 
-   
+<a name="visual"></a>
+2. **Visuals** - A versatile function that takes input data and generates clear, customizable plots, allowing users to visualize relationships, trends, and patterns effortlessly.
+   _Initiation by_ - visual(df)
+   _Input Parameters_ - (df,plot = "boxplot", x=None, y=None,hue = None,orient=None, color=None, palette=None,bins='auto',
+           dodge=False,markers=True,estimator='mean',stat='count',logistic=False,order=1, logx=False,kind='scatter')
+   _Function Return_ - visual graph by selecting different plot types (default = "boxplot")
+   _visual plots_ -
+      1. boxplot - variable parameters(y, orient, color, palette, hue)
+      2. histplot - variable parameters(hue, y, bins, color, palette)
+      3. violinplot - variable parameters(y, orient, color, palette, hue)
+      4. stripplot - variable parameters(y, orient, color, palette, hue, dodge)
+      5. swarmplot - variable parameters(y, orient, color, palette, hue, dodge)
+      6. scatterplot - variable parameters(y, orient, color, palette, hue, markers)
+      7. lineplot - variable parameters(y, color, palette, hue, markers)
+      8. barplot - variable parameters(y, color, palette, hue, estimator)
+      9. countplot - variable parameters(y, color, palette, hue, stat)
+      10. regplot - variable parameters(y, color, logistic, order, logx)
+      11. heatmap - variable parameters(None)
+      12. pairplot -  variable parameters(hue =hue,kind=kind)
+for detailed study of parameters and plots please refer offical site link- [Seaborn](https://seaborn.pydata.org/api.html))
 
 
