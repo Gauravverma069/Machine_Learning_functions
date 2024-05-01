@@ -3,11 +3,11 @@
 A machine learning function repository for a centralized collection of various machine learning algorithms, models, and utilities designed to perform specific tasks or solve particular problems. 
 
 ## Functions List:
-1.  [_**Detect Outliers**_](#Detect Outliers)
+1.  [_**Detect Outliers**_](#Detect_Outliers)
 
 ## Functions in Detail:
 
-<a name="Detect Outliers"></a>
+<a name="Detect_Outliers"></a>
 1. **Detect Outliers** - The detect_outliers function is designed to identify outliers within a dataset. Outliers are data points that significantly deviate from the rest of the data distribution and may represent errors, anomalies, or rare events. This function employs statistical techniques or machine learning algorithms to detect such outliers.
    _Initiation by_ - detect_outliers(df)
    _Input Parameters_ (df) - Pandas DataFrame
