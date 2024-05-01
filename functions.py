@@ -1,12 +1,15 @@
-# outlier Detection for easy access for distance based Machine Learning models.
+
 
 # Importing Required Libraries
 
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # creating a function for outlier detection in a DataFrame.
 def detect_outliers(df): 
+# outlier Detection for easy access for distance based Machine Learning models.
     
     global outlier_df,num_cols,zscore_cols,outlier_indexes,iqr_cols  # creating a global variables
     outlier_df = pd.DataFrame({"method" :[],"columns name":[],
@@ -94,3 +97,47 @@ def detect_outliers(df):
     
     return outlier_df  # returning Outlier DataFrame
 
+# Visual function using Seaborn for graph plotting.
+def visual(df,plot = "boxplot", x=None, y=None,hue = None,orient=None, color=None, palette=None,bins='auto',
+           dodge=False,markers=True,estimator='mean',stat='count',logistic=False,order=1, logx=False,kind='scatter'):
+               # parameters for Graph plotting               
+    num_cols = df.select_dtypes(exclude = "object").columns.tolist() # selecting numerical columns from DataFrane
+    for col in num_cols:
+        if plot == "boxplot":
+            sns.boxplot(df,x = col,y = y,orient = orient,color = color, palette = palette,hue = hue)
+            plt.show()
+        elif plot == "histplot":
+            sns.histplot(df,x = col,kde = True,hue = hue,y = y,bins='auto',color = color, palette = palette)
+            plt.show()
+        elif plot == "violinplot":
+            sns.violinplot(df,x = col,y = y,orient = orient,color = color, palette = palette,hue = hue)
+            plt.show()
+        elif plot == "stripplot":
+            sns.stripplot(df,x = col,y = y,orient = orient,color = color, palette = palette,hue = hue,dodge=dodge)
+            plt.show()
+        elif plot == "swarmplot":
+            sns.swarmplot(df,x = col,y = y,orient = orient,color = color, palette = palette,hue = hue,dodge=dodge)
+            plt.show()
+        elif plot == "scatterplot":
+            sns.swarmplot(df,x = col,y = y,orient = orient,color = color, palette = palette,hue = hue,markers=markers)
+            plt.show()
+        elif plot == "lineplot":
+            sns.lineplot(df,x = col,y = y,color = color, palette = palette,hue = hue,markers= markers)
+            plt.show()
+        elif plot == "barplot":
+            sns.barplot(df,x = col,y = y,color = color, palette = palette,hue = hue,estimator=estimator)
+            plt.show()
+        elif plot == "countplot":
+            sns.countplot(df,x = col,y = y,color = color, palette = palette,hue = hue,stat=stat)
+            plt.show()
+        elif plot == "regplot":
+            sns.regplot(df,x = col,y = y,color = color,logistic=logistic,order=order, logx=logx)
+            plt.show()
+        elif plot == "heatmap":
+            sns.heatmap(df[num_cols].corr(),annot =True)
+            plt.show()
+            break
+        elif plot == "pairplot":
+            sns.pairplot(df[num_cols],hue =hue,kind=kind)
+            plt.show()
+            break
