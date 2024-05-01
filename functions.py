@@ -8,7 +8,7 @@ import numpy as np
 # creating a function for outlier detection in a DataFrame.
 def detect_outliers(df): 
     
-    global outlier_df  # creating a global variable for outlier dataframe
+    global outlier_df,num_cols,zscore_cols,outlier_indexes,iqr_cols  # creating a global variables
     outlier_df = pd.DataFrame({"method" :[],"columns name":[],
                                "upper limit":[],"lower limit":[],
                                "no of Rows":[],"percentage outlier":[]})  # empty dataframe to store results
@@ -17,7 +17,7 @@ def detect_outliers(df):
     num_cols = df.select_dtypes(exclude = "object").columns.tolist() # excluding Object Datatypes
     zscore_cols = []
     iqr_cols = []
-    global outlier_indexes # creating a global variable for outlier indexes
+    
     outlier_indexes =[]
     for col in num_cols:
         skewness = df[col].skew() 
