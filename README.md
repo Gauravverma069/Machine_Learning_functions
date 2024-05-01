@@ -24,8 +24,8 @@ A machine learning function repository for a centralized collection of various m
 Additional Function returns
   1. **outlier_indexes** - return list of outlier Indexes
   2. **num_cols** - return list of nemerical columns
-  3. **zscore_cols** = list of columns using method Z_score
-  4.**iqr_cols** = list of columns using method IQR
+  3. **zscore_cols** - list of columns using method Z_score
+  4. **iqr_cols** - list of columns using method IQR
 
    
 
