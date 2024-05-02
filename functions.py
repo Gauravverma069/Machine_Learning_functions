@@ -142,8 +142,19 @@ def visual(df,plot = "boxplot", x=None, y=None,hue = None,orient=None, color=Non
             plt.show()
             break
 
+# creating an empty dataFrame to store evaluation data
+evaluation_df = pd.DataFrame({"model": [],# model displays regression model
+                                  "method": [],# method display evaluation metrics used
+                                  "train_r2": [],# train r2 shows train R2 score
+                                  "test_r2": [],# test r2 shows test R2 Score
+                                  "adjusted_r2_train": [],# adjusted_r2_train shows adjusted r2 score for train
+                                  "adjusted_r2_test": [],# adjusted_r2_test shows adjusted r2 score for test
+                                  "train_evaluation": [],# train_evaluation shows train evaluation score by used method
+                                  "test_evaluation" : []# test_evaluation shows test evaluation score by used method
+                                })
+
 # creating a function for evaluation of regression data
-def evaluation(X_train,X_test,y_train,y_test,model = LinearRegression(),method = root_mean_squared_error):# input parameters from train_test_split , model and method for evaluation.
+def reg_evaluation(X_train,X_test,y_train,y_test,model = LinearRegression(),method = root_mean_squared_error):# input parameters from train_test_split , model and method for evaluation.
     model = model
     model.fit(X_train,y_train) # model fitting
     y_pred_train = model.predict(X_train) # model prediction for train
