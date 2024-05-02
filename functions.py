@@ -141,3 +141,50 @@ def visual(df,plot = "boxplot", x=None, y=None,hue = None,orient=None, color=Non
             sns.pairplot(df[num_cols],hue =hue,kind=kind)
             plt.show()
             break
+
+# creating a function for evaluation of regression data
+def evaluation(X_train,X_test,y_train,y_test,model = LinearRegression(),method = root_mean_squared_error):# input parameters from train_test_split , model and method for evaluation.
+    model = model
+    model.fit(X_train,y_train) # model fitting
+    y_pred_train = model.predict(X_train) # model prediction for train
+    y_pred_test = model.predict(X_test) # model prediction for test
+    
+    train_r2 = r2_score(y_train, y_pred_train) # evaluating r2 score for train
+    test_r2 = r2_score(y_test, y_pred_test)  # evaluating r2 score for test
+    
+    n_r_train, n_c_train = X_train.shape # getting no of rows and columns of train data
+    n_r_test,  n_c_test = X_test.shape # getting no of rows and columns of test data
+    
+    adj_r2_train = 1 - ((1 - train_r2)*(n_r_train - 1)/ (n_r_train - n_c_train - 1))  # evaluating adjusted r2 score for train
+    adj_r2_test = 1 - ((1 - test_r2)*(n_r_test - 1)/ (n_r_test - n_c_test - 1)) # evaluating adjusted r2 score for test
+
+    train_evaluation = method(y_train, y_pred_train) # evaluating train error
+    test_evaluation = method(y_test, y_pred_test) # evaluating test error
+    
+    if method == root_mean_squared_error:
+        a = "root_mean_squared_error"
+    elif method ==root_mean_squared_log_error:
+        a = "root_mean_squared_log_error"
+    elif method == mean_absolute_error:
+        a = "mean_absolute_error"
+    elif method == mean_squared_error:
+        a = "mean_squared_error"
+    elif method == mean_squared_log_error:
+        a = "mean_squared_log_error"    
+    
+    # declaring global dataframes
+    global evaluation_df,temp_df
+    
+    # creating temporary dataframe for concating in later into main evaluation dataframe
+    temp_df = pd.DataFrame({"model": [model],
+                                  "method": [a],
+                                  "train_r2": [train_r2],
+                                  "test_r2": [test_r2],
+                                  "adjusted_r2_train": [adj_r2_train],
+                                  "adjusted_r2_test": [adj_r2_test],
+                                  "train_evaluation": [train_evaluation],
+                                  "test_evaluation" : [test_evaluation]
+                                })
+    evaluation_df = pd.concat([evaluation_df,temp_df]).reset_index(drop = True)
+    
+    return evaluation_df # returning evaluation_df
