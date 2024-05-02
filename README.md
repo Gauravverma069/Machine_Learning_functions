@@ -6,6 +6,7 @@ A machine learning function repository for a centralized collection of various m
 1.  [_**Detect Outliers**_](#Detect_Outliers)
 2.  [_**Visual**_](#visual)
 3.  [_**Regression Evaluation**_](#reg_eval)
+4.  [_**Null value handling with encoding and evaluation**_](#null_handling)
 
 ## Functions in Detail:
 
@@ -78,5 +79,34 @@ This Python function provides a comprehensive evaluation of regression models by
    5. train_evaluation/test_evaluation - evaluation score for train and test
       
 
+<a name="null_handling"></a>
+### 4. **Null value handling with encoding and evaluation** 
 
+This repository contains a Python function for imputing missing values in datasets. Missing data is a common problem in data analysis and can significantly affect the results of statistical analyses or machine learning models. This function provides a simple yet effective methods for handling missing values.while also encoding categorical columns, and evaluating with reg_evaluation function.
+
+   _Initiation by_ - null_handling(df).
+   
+   _Input Parameters_ - (df,ord_cols = None,categories='auto',model = LinearRegression(),method = root_mean_squared_error).
+
+   _Function Return_ - evaluation_df (pandas Dataframe).
+
+   1.create 11 dataframes with different combinations for imputing and missing value handling.
+   
+      1. knn_imputed_df,
+      2. si_mean_imputed_df,
+      3. si_median_imputed_df,
+      4. si_most_frequent_imputed_df,
+      5. iter_imputed_df,
+      6. knn_imputed_df_with_dropped_cat_missing_val,
+      7. si_mean_imputed_df_with_dropped_cat_missing_val,
+      8. si_median_imputed_df_with_dropped_cat_missing_val,
+      9. si_most_frequent_imputed_df_with_dropped_cat_missing_val,
+      10. iter_imputed_df_with_dropped_cat_missing_val,
+      11. miss_val_dropped_df
+   
+   2. ordinal encoding and onehotencoding of categorical columns
+   3. train_test_split and evaluation dataframe returns
+    ![evaluation_df](https://github.com/Gauravverma069/Machine_Learning_functions/assets/121911821/0f972a95-8a2f-4704-b250-0f9219c050a9)
+
+   
 
