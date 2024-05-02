@@ -199,3 +199,121 @@ def reg_evaluation(X_train,X_test,y_train,y_test,model = LinearRegression(),meth
     evaluation_df = pd.concat([evaluation_df,temp_df]).reset_index(drop = True)
     
     return evaluation_df # returning evaluation_df
+
+
+# importing important libraries
+from sklearn.impute import KNNImputer
+from sklearn.experimental import enable_iterative_imputer
+from sklearn.impute import IterativeImputer,SimpleImputer
+from sklearn.preprocessing import OrdinalEncoder,OneHotEncoder
+
+# creating a function for null_handling with different methods for null value imputing, categorical columns encoding and evaluation 
+def null_handling(df,ord_cols = None,categories='auto',model = LinearRegression(),method = root_mean_squared_error):
+    num_cols = df.select_dtypes(exclude = "O").columns 
+    cat_cols = df.select_dtypes(include = "O").columns
+    if df.isnull().sum().sum() ==0:
+        print("No null Values in DataFrame")
+    else:
+        # applying various imputing methods on numerical columns
+        knn_imputer = KNNImputer(n_neighbors = 5) 
+        knn_imputed_num_df = pd.DataFrame(data = knn_imputer.fit_transform(df[num_cols]),columns = knn_imputer.get_feature_names_out())
+        si_imputer = SimpleImputer(strategy = "mean")
+        si_mean_imputed_num_df = pd.DataFrame(data = si_imputer.fit_transform(df[num_cols]),columns = si_imputer.get_feature_names_out())
+        si_imputer = SimpleImputer(strategy = "median")
+        si_median_imputed_num_df = pd.DataFrame(data = si_imputer.fit_transform(df[num_cols]),columns = si_imputer.get_feature_names_out())
+        si_imputer = SimpleImputer(strategy = "most_frequent")
+        si_most_frequent_imputed_num_df = pd.DataFrame(data = si_imputer.fit_transform(df[num_cols]),columns = si_imputer.get_feature_names_out())
+        iter_imputer = IterativeImputer(max_iter = 200,random_state= 42)
+        iter_imputed_num_df = pd.DataFrame(data = iter_imputer.fit_transform(df[num_cols]),columns = iter_imputer.get_feature_names_out())
+        
+        # treating missing values in categorical columns
+        si_imputer = SimpleImputer(strategy = "most_frequent")
+        si_most_frequent_imputed_cat_df = pd.DataFrame(data = si_imputer.fit_transform(df[cat_cols]),columns = si_imputer.get_feature_names_out())
+        cat_miss_val_dropped_df = df[cat_cols].dropna()
+        
+        # creating a dataframe with dropping missing values
+        miss_val_dropped_df = df.dropna()
+        
+        # creating dataframe by concating numerical df with "most frequent" imputing of categorical column
+        knn_imputed_df              =(pd.concat([knn_imputed_num_df,si_most_frequent_imputed_cat_df],axis = 1))
+        si_mean_imputed_df          =(pd.concat([si_mean_imputed_num_df,si_most_frequent_imputed_cat_df],axis = 1))
+        si_median_imputed_df        =(pd.concat([si_median_imputed_num_df,si_most_frequent_imputed_cat_df],axis = 1))
+        si_most_frequent_imputed_df =(pd.concat([si_most_frequent_imputed_num_df,si_most_frequent_imputed_cat_df],axis = 1))
+        iter_imputed_df             =(pd.concat([iter_imputed_num_df,si_most_frequent_imputed_cat_df],axis = 1))
+        # creating dataframe by concating numerical df with dropping of missing values from categorical column
+        knn_imputed_df_with_dropped_cat_missing_val              =(pd.concat([knn_imputed_num_df.loc[cat_miss_val_dropped_df.index],cat_miss_val_dropped_df],axis = 1))
+        si_mean_imputed_df_with_dropped_cat_missing_val          =(pd.concat([si_mean_imputed_num_df.loc[cat_miss_val_dropped_df.index],cat_miss_val_dropped_df],axis = 1))
+        si_median_imputed_df_with_dropped_cat_missing_val        =(pd.concat([si_median_imputed_num_df.loc[cat_miss_val_dropped_df.index],cat_miss_val_dropped_df],axis = 1))
+        si_most_frequent_imputed_df_with_dropped_cat_missing_val =(pd.concat([si_most_frequent_imputed_num_df.loc[cat_miss_val_dropped_df.index],cat_miss_val_dropped_df],axis = 1))
+        iter_imputed_df_with_dropped_cat_missing_val             =(pd.concat([iter_imputed_num_df.loc[cat_miss_val_dropped_df.index],cat_miss_val_dropped_df],axis = 1))
+        
+        # list of dataframes
+        list_df_after_missing_values= [knn_imputed_df,
+                                si_mean_imputed_df,
+                                si_median_imputed_df,
+                                si_most_frequent_imputed_df,
+                                iter_imputed_df,
+                                knn_imputed_df_with_dropped_cat_missing_val,
+                                si_mean_imputed_df_with_dropped_cat_missing_val,
+                                si_median_imputed_df_with_dropped_cat_missing_val,
+                                si_most_frequent_imputed_df_with_dropped_cat_missing_val,
+                                iter_imputed_df_with_dropped_cat_missing_val,
+                                miss_val_dropped_df]
+        list_df_after_missing_values_names= ["knn_imputed_df",
+                                "si_mean_imputed_df",
+                                "si_median_imputed_df",
+                                "si_most_frequent_imputed_df",
+                                "iter_imputed_df",
+                                "knn_imputed_df_with_dropped_cat_missing_val",
+                                "si_mean_imputed_df_with_dropped_cat_missing_val",
+                                "si_median_imputed_df_with_dropped_cat_missing_val",
+                                "si_most_frequent_imputed_df_with_dropped_cat_missing_val",
+                                "iter_imputed_df_with_dropped_cat_missing_val",
+                                "miss_val_dropped_df"]
+        if ord_cols != None:
+            # ordinal encoding 
+            ord = OrdinalEncoder(categories=categories,handle_unknown = "use_encoded_value",unknown_value = -1,dtype = "float")
+            knn_imputed_df[ord_cols] = ord.fit_transform(knn_imputed_df[ord_cols])
+            si_mean_imputed_df[ord_cols] = ord.fit_transform(si_mean_imputed_df[ord_cols])
+            si_median_imputed_df[ord_cols] = ord.fit_transform(si_median_imputed_df[ord_cols])
+            si_most_frequent_imputed_df[ord_cols] = ord.fit_transform(si_most_frequent_imputed_df[ord_cols])
+            iter_imputed_df[ord_cols] = ord.fit_transform(iter_imputed_df[ord_cols])
+            knn_imputed_df_with_dropped_cat_missing_val[ord_cols] = ord.fit_transform(knn_imputed_df_with_dropped_cat_missing_val[ord_cols])
+            si_mean_imputed_df_with_dropped_cat_missing_val[ord_cols] = ord.fit_transform(si_mean_imputed_df_with_dropped_cat_missing_val[ord_cols])
+            si_median_imputed_df_with_dropped_cat_missing_val[ord_cols] = ord.fit_transform(si_median_imputed_df_with_dropped_cat_missing_val[ord_cols])
+            si_most_frequent_imputed_df_with_dropped_cat_missing_val[ord_cols] = ord.fit_transform(si_most_frequent_imputed_df_with_dropped_cat_missing_val[ord_cols])
+            iter_imputed_df_with_dropped_cat_missing_val[ord_cols] = ord.fit_transform(iter_imputed_df_with_dropped_cat_missing_val[ord_cols])
+            miss_val_dropped_df[ord_cols] = ord.fit_transform(miss_val_dropped_df[ord_cols])
+            
+            ohe_cols = list(set(cat_cols) - set(ord_cols))
+            
+            # one hot encoding
+            ohe = OneHotEncoder(sparse_output = False,handle_unknown = "ignore")
+            
+            pd.options.mode.chained_assignment = None
+            for i in list_df_after_missing_values:
+                i.loc[:, ohe.get_feature_names_out()] = ohe.fit_transform(i[ohe_cols])
+                i.drop(columns = ohe_cols,inplace = True)
+            
+            pd.options.mode.chained_assignment = 'warn'
+            
+            for j,i in enumerate(list_df_after_missing_values):
+                
+                # train test and splitting
+                X_train, X_test, y_train, y_test = tts(i,y[i.index],test_size = 0.25, random_state = 42)
+                reg_evaluation(list_df_after_missing_values_names[j],X_train,X_test,y_train,y_test)
+        else:
+            ohe = OneHotEncoder(sparse_output = False,handle_unknown = "ignore")
+            pd.options.mode.chained_assignment = None
+            for i in list_df_after_missing_values:
+                i.loc[:, ohe.get_feature_names_out()] = ohe.fit_transform(i[cat_cols])
+                i.drop(columns = cat_cols,inplace = True)
+            
+            pd.options.mode.chained_assignment = 'warn'
+            
+            for j,i in enumerate(list_df_after_missing_values):
+    
+                X_train, X_test, y_train, y_test = tts(i,y[i.index],test_size = 0.25, random_state = 42)
+                reg_evaluation(list_df_after_missing_values_names[j],X_train,X_test,y_train,y_test,model = model,method = method)
+            
+    return evaluation_df # returning evaluating dataframe
