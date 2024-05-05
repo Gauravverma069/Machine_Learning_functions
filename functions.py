@@ -25,7 +25,7 @@ from sklearn.linear_model import Lasso
 
 
 def best_tts(X,y,stratify=None,shuffle=True,model = LinearRegression(),method = root_mean_squared_error):
-    global train_r2_
+    
     train_r2_,train_r2_ts,train_r2_rs = 0,0,0
     test_r2_,test_r2_ts,test_r2_rs = 0,0,0
     adj_r2_train_,adj_r2_train_ts,adj_r2_train_rs = 0,0,0
