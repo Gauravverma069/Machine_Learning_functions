@@ -2,7 +2,7 @@
 
 A machine learning function repository for a centralized collection of various machine learning algorithms, models, and utilities designed to perform specific tasks or solve particular problems. 
 
-## Functions List:best_tts
+## Functions List:
 
 1.  [_**Best Train Test Split**_](#best_tts)
 2.  [_**Regression Evaluation**_](#reg_eval)
